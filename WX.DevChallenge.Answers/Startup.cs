@@ -29,7 +29,8 @@ namespace WX.DevChallenge.Answers
                 .GetSection("ChallengeConfig")
                 .Get<ChallengeConfig>();
             services.AddSingleton(challengeConfig);
-            services.AddSingleton(typeof(HelperResourceService));
+            services.AddScoped(typeof(ProductSortService));
+            services.AddScoped(typeof(HelperResourceService));
 
             services.AddHttpClient();
         }

@@ -13,14 +13,17 @@ namespace WX.DevChallenge.Answers.Controllers
     public class AnswersController : Controller
     {
         private readonly ChallengeConfig _challengeConfig;
+        private readonly ProductSortService _productSortService;
         private readonly HelperResourceService _helperResourceService;
 
         public AnswersController(
             ChallengeConfig challengeConfig,
+            ProductSortService productSortService,
             HelperResourceService helperResourceService) 
             : base()
         {
             _challengeConfig = challengeConfig;
+            _productSortService = productSortService;
             _helperResourceService = helperResourceService;
         }
 
@@ -44,8 +47,11 @@ namespace WX.DevChallenge.Answers.Controllers
 
             var products = await _helperResourceService.GetProducts();
 
-            return Ok();
+            var sortedProducts = _productSortService
+                .Sort(products, sortingOption)
+                .ToList();
 
+            return Json(sortedProducts);
         }
     }
 }
