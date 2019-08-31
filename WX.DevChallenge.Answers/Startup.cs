@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using WX.DevChallenge.Answers.Models;
+using WX.DevChallenge.Answers.Services;
 
 namespace WX.DevChallenge.Answers
 {
@@ -32,6 +29,7 @@ namespace WX.DevChallenge.Answers
                 .GetSection("ChallengeConfig")
                 .Get<ChallengeConfig>();
             services.AddSingleton(challengeConfig);
+            services.AddSingleton(typeof(HelperResourceService));
 
             services.AddHttpClient();
         }
@@ -50,6 +48,24 @@ namespace WX.DevChallenge.Answers
 
             // we return Bad Request to non https requests so no redirection needed
             //app.UseHttpsRedirection();
+
+            // return HTTP 500 with a message for AppExceptions. Any other exception let it run the normal course 
+            app.UseExceptionHandler(a => a.Run(async context =>
+            {
+                var exception = context
+                    .Features
+                    .Get<IExceptionHandlerPathFeature>()
+                    .Error;
+
+                if (!(exception is AppException))
+                    return;
+
+                context.Response.ContentType = "application/text";
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                
+                await context.Response.WriteAsync(exception.Message);
+            }));
+
             app.UseMvc();
         }
     }

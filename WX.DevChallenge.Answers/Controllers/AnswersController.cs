@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
 using WX.DevChallenge.Answers.Models;
 using WX.DevChallenge.Answers.Security;
+using WX.DevChallenge.Answers.Services;
 
 namespace WX.DevChallenge.Answers.Controllers
 {
@@ -15,12 +13,15 @@ namespace WX.DevChallenge.Answers.Controllers
     public class AnswersController : Controller
     {
         private readonly ChallengeConfig _challengeConfig;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HelperResourceService _helperResourceService;
 
-        public AnswersController(ChallengeConfig challengeConfig, IHttpClientFactory httpClientFactory) : base()
+        public AnswersController(
+            ChallengeConfig challengeConfig,
+            HelperResourceService helperResourceService) 
+            : base()
         {
             _challengeConfig = challengeConfig;
-            _httpClientFactory = httpClientFactory;
+            _helperResourceService = helperResourceService;
         }
 
         [HttpGet("user")]
@@ -37,28 +38,11 @@ namespace WX.DevChallenge.Answers.Controllers
         public async Task<IActionResult> SortAnswer(string sortOption)
         {
             // make sure sort option is valid
-            SortOption option;
-            if (!Enum.TryParse(sortOption, out option))
+            SortOption sortingOption;
+            if (!Enum.TryParse(sortOption, out sortingOption))
                 return BadRequest("Invalid sort option");
 
-            // get list of products from help resource
-            var builder = new UriBuilder(_challengeConfig.HelperResourceBaseUrl);
-            builder.Path += "products";
-            builder.Query = "token=" + _challengeConfig.Token;
-
-            var request = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
-            request.Headers.Add("Accept", "application/json");
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error retrieving products");
-            }
-
-            var jsonContent = await response.Content.ReadAsStringAsync();
-            var productsList = JsonConvert.DeserializeObject<IList<Product>>(jsonContent);
+            var products = await _helperResourceService.GetProducts();
 
             return Ok();
 
