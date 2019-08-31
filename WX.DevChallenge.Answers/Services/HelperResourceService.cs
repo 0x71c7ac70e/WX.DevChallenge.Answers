@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using WX.DevChallenge.Answers.Models;
 
@@ -21,14 +22,18 @@ namespace WX.DevChallenge.Answers.Services
             _challengeConfig = challengeConfig;
         }
 
-        private async Task<string> GetJsonResource(string finalPath)
+        private async Task<string> SendJsonRequest(string finalPath, HttpMethod httpMethod, string content = null)
         {
             var builder = new UriBuilder(_challengeConfig.HelperResourceBaseUrl);
             builder.Path += finalPath;
             builder.Query = "token=" + _challengeConfig.Token;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
+            var request = new HttpRequestMessage(httpMethod, builder.Uri);
             request.Headers.Add("Accept", "application/json");
+            if (!String.IsNullOrEmpty(content))
+            {
+                request.Content = new StringContent(content, Encoding.UTF8, "application/json");
+            }
 
             var httpClient = _httpClientFactory.CreateClient();
             var response = await httpClient.SendAsync(request);
@@ -42,14 +47,20 @@ namespace WX.DevChallenge.Answers.Services
 
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            var jsonContent = await GetJsonResource("products");
+            var jsonContent = await SendJsonRequest("products", HttpMethod.Get);
             return JsonConvert.DeserializeObject<IEnumerable<Product>>(jsonContent);
         }
 
         public async Task<IEnumerable<ShopperPurchase>> GetShopperHistory()
         {
-            var jsonContent = await GetJsonResource("shopperHistory");
+            var jsonContent = await SendJsonRequest("shopperHistory", HttpMethod.Get);
             return JsonConvert.DeserializeObject<IEnumerable<ShopperPurchase>>(jsonContent);
+        }
+
+        public async Task<decimal> PostTrolleyTotal(string inputData)
+        {
+            var result = await SendJsonRequest("trolleyCalculator", HttpMethod.Post, inputData);
+            return Convert.ToDecimal(result);
         }
     }
 }

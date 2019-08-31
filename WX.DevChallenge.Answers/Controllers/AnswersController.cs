@@ -53,5 +53,15 @@ namespace WX.DevChallenge.Answers.Controllers
 
             return Json(sortedProducts);
         }
+
+        [HttpPost("trolleyTotal")]
+        public async Task<IActionResult> TrolleyTotalAnswer()
+        {
+            using (var reader = new System.IO.StreamReader(Request.Body))
+            {
+                var body = reader.ReadToEnd();
+                return Ok(await _helperResourceService.PostTrolleyTotal(body));
+            }
+        }
     }
 }
