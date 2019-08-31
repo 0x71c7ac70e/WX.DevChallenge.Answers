@@ -31,8 +31,9 @@ namespace WX.DevChallenge.Answers
             var challengeConfig = Configuration
                 .GetSection("ChallengeConfig")
                 .Get<ChallengeConfig>();
-
             services.AddSingleton(challengeConfig);
+
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
