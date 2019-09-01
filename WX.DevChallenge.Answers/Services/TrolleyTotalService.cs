@@ -62,7 +62,7 @@ namespace WX.DevChallenge.Answers.Services
                     lowest = simPrice;
             }
 
-            return lowest.Value;
+            return lowest.HasValue ? lowest.Value : 0;
         }
     }
 }
