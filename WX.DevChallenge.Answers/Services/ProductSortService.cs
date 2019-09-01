@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using WX.DevChallenge.Answers.Models;
 
@@ -25,9 +22,9 @@ namespace WX.DevChallenge.Answers.Services
                 case SortOption.Descending: sortStrategy = new DescendingSortStrategy(); break;
                 case SortOption.Recommended:
                     {
-
                         var shopperHistory = Task.Run(() => _helperResourceService.GetShopperHistory()).Result;
-                        sortStrategy = new RecommendedSortStrategy(shopperHistory); break;
+                        sortStrategy = new RecommendedSortStrategy(shopperHistory);
+                        break;
                     }
                     
                 default: break;
@@ -36,8 +33,7 @@ namespace WX.DevChallenge.Answers.Services
             if (sortStrategy == null)
                 return products;
 
-            return sortStrategy
-                .Sort(products);
+            return sortStrategy.Sort(products);
         }
 
         public abstract class SortStrategy

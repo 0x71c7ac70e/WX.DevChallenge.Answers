@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,21 +11,25 @@ namespace WX.DevChallenge.Answers.Controllers
 {
     [Route("api/[controller]")]
     [RequireHttpsStrict]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class AnswersController : Controller
     {
         private readonly ChallengeConfig _challengeConfig;
         private readonly ProductSortService _productSortService;
         private readonly HelperResourceService _helperResourceService;
+        private readonly ILogger<AnswersController> _logger;
 
         public AnswersController(
             ChallengeConfig challengeConfig,
             ProductSortService productSortService,
-            HelperResourceService helperResourceService) 
+            HelperResourceService helperResourceService,
+            ILogger<AnswersController> logger) 
             : base()
         {
             _challengeConfig = challengeConfig;
             _productSortService = productSortService;
             _helperResourceService = helperResourceService;
+            _logger = logger;
         }
 
         [HttpGet("user")]
@@ -60,6 +65,7 @@ namespace WX.DevChallenge.Answers.Controllers
             using (var reader = new System.IO.StreamReader(Request.Body))
             {
                 var body = reader.ReadToEnd();
+                //_logger.LogInformation(body);
                 return Ok(await _helperResourceService.PostTrolleyTotal(body));
             }
         }
