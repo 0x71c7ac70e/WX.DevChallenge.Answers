@@ -1,0 +1,28 @@
+[
+  {
+    "name": "A",
+    "price": 1,
+    "quantity": 0
+  },
+  {
+    "name": "B",
+    "price": 99.99,
+    "quantity": 0
+  },
+  {
+    "name": "C",
+    "price": 0.99,
+    "quantity": 0
+  },
+  {
+    "name": "D",
+    "price": 69.69,
+    "quantity": 0
+  },
+  {
+    "name": "E",
+    "price": 9001,
+    "quantity": 0
+  }
+]
+

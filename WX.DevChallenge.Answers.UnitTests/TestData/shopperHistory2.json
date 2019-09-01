@@ -1,0 +1,52 @@
+[
+  {
+    "customerId": 8,
+    "products": [
+      {
+        "name": "A",
+        "price": 1,
+        "quantity": 3
+      },
+      {
+        "name": "C",
+        "price": 99.99,
+        "quantity": 4
+      },
+      {
+        "name": "E",
+        "price": 9001,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "customerId": 8,
+    "products": [
+      {
+        "name": "A",
+        "price": 1,
+        "quantity": 2
+      },
+      {
+        "name": "B",
+        "price": 99.99,
+        "quantity": 8
+      }
+    ]
+  },
+  {
+    "customerId": 8,
+    "products": [
+      {
+        "name": "C",
+        "price": 10.99,
+        "quantity": 4
+      },
+      {
+        "name": "E",
+        "price": 999999999999,
+        "quantity": 2
+      }
+    ]
+  }
+]

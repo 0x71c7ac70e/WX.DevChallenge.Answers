@@ -1,0 +1,72 @@
+[
+  {
+    "customerId": 1,
+    "products": [
+      {
+        "name": "A",
+        "price": 1,
+        "quantity": 9
+      },
+      {
+        "name": "C",
+        "price": 99.99,
+        "quantity": 1
+      },
+      {
+        "name": "E",
+        "price": 9001,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "customerId": 2,
+    "products": [
+      {
+        "name": "A",
+        "price": 1,
+        "quantity": 2
+      },
+      {
+        "name": "B",
+        "price": 99.99,
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "customerId": 3,
+    "products": [
+      {
+        "name": "C",
+        "price": 10.99,
+        "quantity": 2
+      },
+      {
+        "name": "F",
+        "price": 999999999999,
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "customerId": 2,
+    "products": [
+      {
+        "name": "A",
+        "price": 1,
+        "quantity": 5
+      },
+      {
+        "name": "B",
+        "price": 99.99,
+        "quantity": 4
+      },
+      {
+        "name": "C",
+        "price": 0.99,
+        "quantity": 1
+      }
+    ]
+  }
+]
