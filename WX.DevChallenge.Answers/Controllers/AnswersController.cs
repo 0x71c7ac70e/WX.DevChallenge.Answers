@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,18 +18,21 @@ namespace WX.DevChallenge.Answers.Controllers
         private readonly ChallengeConfig _challengeConfig;
         private readonly ProductSortService _productSortService;
         private readonly HelperResourceService _helperResourceService;
+        private readonly TrolleyTotalService _trolleyTotalService;
         private readonly ILogger<AnswersController> _logger;
 
         public AnswersController(
             ChallengeConfig challengeConfig,
             ProductSortService productSortService,
             HelperResourceService helperResourceService,
+            TrolleyTotalService trolleyTotalService,
             ILogger<AnswersController> logger) 
             : base()
         {
             _challengeConfig = challengeConfig;
             _productSortService = productSortService;
             _helperResourceService = helperResourceService;
+            _trolleyTotalService = trolleyTotalService;
             _logger = logger;
         }
 
@@ -66,7 +70,11 @@ namespace WX.DevChallenge.Answers.Controllers
             {
                 var body = reader.ReadToEnd();
                 //_logger.LogInformation(body);
-                return Ok(await _helperResourceService.PostTrolleyTotal(body));
+
+                var productsSpecialsQuantities = JsonConvert.DeserializeObject<ProductsSpecialsQuantities>(body);
+                return Ok(_trolleyTotalService.GetLowestTotal(productsSpecialsQuantities));
+
+                //return Ok(await _helperResourceService.PostTrolleyTotal(body));
             }
         }
     }

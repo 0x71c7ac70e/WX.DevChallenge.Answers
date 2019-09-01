@@ -30,6 +30,7 @@ namespace WX.DevChallenge.Answers
             services.AddSingleton(challengeConfig);
             services.AddScoped(typeof(ProductSortService));
             services.AddScoped(typeof(HelperResourceService));
+            services.AddScoped(typeof(TrolleyTotalService));
 
             services.AddHttpClient();
         }
